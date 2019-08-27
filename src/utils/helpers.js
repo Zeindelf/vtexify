@@ -2,11 +2,7 @@ const DateDiff = require('date-diff');
 
 const wait = require('util').promisify(setTimeout); // For test purpose
 
-const diff = (date) => {
-  const diffDate = new DateDiff(new Date(), new Date(date));
-
-  return diffDate.hours();
-};
+const diff = (date) => new DateDiff(new Date(), new Date(date));
 
 /**
  * Check if a string is a valid mail.
@@ -60,10 +56,28 @@ const objectSearch = (object, needle) => {
   return false;
 };
 
+/**
+ * Zero padding number
+ *
+ * @param  {integer} number     Number to format
+ * @param  {integer} [size=2]   Digits limit
+ * @return {string}             Formatted num with zero padding
+ */
+const pad = (number, size) => {
+  let stringNum = String(number);
+
+  while (stringNum.length < (size || 2)) {
+    stringNum = `0${stringNum}`;
+  }
+
+  return stringNum;
+};
+
 module.exports = {
   wait,
   diff,
   isEmail,
   isVtexCode,
   objectSearch,
+  pad,
 };

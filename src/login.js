@@ -19,9 +19,9 @@ module.exports = async () => {
   const { account, email } = await prompt(loginQuestions);
 
   if (current) {
-    const { account: currentAcc, updateAt } = current;
+    const { account: currentAcc, updatedAt } = current;
 
-    if (currentAcc === account && diff(updateAt) < 8) {
+    if (currentAcc === account && diff(updatedAt).hours() < 8) {
       console.log();
       success(account, email);
       process.exit(1);
