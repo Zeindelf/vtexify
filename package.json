@@ -1,6 +1,6 @@
 {
   "name": "vtexify",
-  "version": "1.0.0-canary.0",
+  "version": "1.0.0-canary.1",
   "description": "VTEX CLI Toolbelt for old CMS.",
   "main": "./bin/index.js",
   "bin": {
