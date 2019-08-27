@@ -1,2 +1,2 @@
 # Vtexify
-VTEX CLI Toolbelt for old CMS
+VTEX CLI Toolbelt for old CMS - WIP
