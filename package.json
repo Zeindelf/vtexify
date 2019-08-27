@@ -1,10 +1,13 @@
 {
   "name": "vtexify",
-  "version": "0.0.1",
+  "version": "1.0.0-canary.0",
   "description": "VTEX CLI Toolbelt for old CMS.",
-  "main": "./index.js",
+  "main": "./bin/index.js",
+  "bin": {
+    "vtexify": "./bin/index.js"
+  },
   "scripts": {
-    "lint": "eslint src --fix --color"
+    "lint": "eslint bin src --fix --color"
   },
   "husky": {
     "hooks": {
@@ -14,6 +17,19 @@
   "repository": "https://github.com/Zeindelf/vtexify.git",
   "author": "Zeindelf <zeindelf@hotmail.com>",
   "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "cli-color": "^1.4.0",
+    "commander": "^3.0.0",
+    "date-diff": "^0.2.1",
+    "fs-extra": "^8.1.0",
+    "inquirer": "^7.0.0",
+    "jsonfile": "^5.0.0",
+    "lodash": "^4.17.15",
+    "ora": "^3.4.0",
+    "qs": "^6.8.0",
+    "update-notifier": "^3.0.1"
+  },
   "devDependencies": {
     "eslint": "^6.2.2",
     "eslint-config-airbnb-base": "^14.0.0",
