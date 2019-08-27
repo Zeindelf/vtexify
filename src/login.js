@@ -18,7 +18,6 @@ module.exports = async () => {
   const spinner = new Ora({ color: 'yellow', indent: 2 });
   const { account, email } = await prompt(loginQuestions);
 
-  // Validate if user is logged in a range of updateAt
   if (current) {
     const { account: currentAcc, updateAt } = current;
 

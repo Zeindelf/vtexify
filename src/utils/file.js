@@ -23,7 +23,7 @@ const writeAuthFile = async (path, file, account, email, authenticationToken, au
       authenticationToken,
       authCookie,
       active: true,
-      updateAt: new Date(),
+      updatedAt: new Date(),
     },
   };
 

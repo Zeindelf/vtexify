@@ -1,6 +1,6 @@
 const DateDiff = require('date-diff');
 
-const wait = require('util').promisify(setTimeout); // Test purpose
+const wait = require('util').promisify(setTimeout); // For test purpose
 
 const diff = (date) => {
   const diffDate = new DateDiff(new Date(), new Date(date));
