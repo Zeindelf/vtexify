@@ -21,7 +21,7 @@ module.exports = async () => {
   if (current) {
     const { account: currentAcc, updatedAt } = current;
 
-    if (currentAcc === account && diff(updatedAt).hours() < 8) {
+    if (currentAcc === account && diff(updatedAt) < process.env.EXPIRE_TIME) {
       console.log();
       success(account, email);
       process.exit(1);

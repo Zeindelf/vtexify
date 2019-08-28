@@ -22,6 +22,7 @@
     "cli-color": "^1.4.0",
     "commander": "^3.0.0",
     "date-diff": "^0.2.1",
+    "dotenv": "^8.1.0",
     "fs-extra": "^8.1.0",
     "inquirer": "^7.0.0",
     "jsonfile": "^5.0.0",

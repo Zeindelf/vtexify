@@ -1,14 +1,7 @@
 const clc = require('cli-color');
 
 const { read, authPath } = require('./utils/file');
-const { diff, objectSearch, pad } = require('./utils/helpers');
-
-const timeConvert = (num) => {
-  const hours = Math.floor(num / 60);
-  const minutes = Math.floor(num % 60);
-
-  return `${pad(hours)}h${pad(minutes)}`;
-};
+const { diff, objectSearch, time } = require('./utils/helpers');
 
 module.exports = async () => {
   const authFile = read(authPath);
@@ -21,11 +14,10 @@ module.exports = async () => {
   }
 
   const { account, email, updatedAt } = current;
-  const expire = diff(updatedAt).minutes();
-  const expireTime = (8 * 60) - expire;
+  const expireTime = (process.env.EXPIRE_TIME) - diff(updatedAt);
 
   console.log();
   console.log(`Account: ${clc.green(account)}`);
   console.log(`User: ${clc.green(email)}`);
-  console.log(`Expire in: ${expireTime > 0 ? clc.green(timeConvert(expireTime)) : clc.red('Expired, please login')}`);
+  console.log(`Expire in: ${expireTime > 0 ? clc.green(time(expireTime)) : clc.red('Expired, please login')}`);
 };

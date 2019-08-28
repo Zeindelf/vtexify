@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+require('dotenv').config();
+
 const program = require('commander');
 const updateNotifier = require('update-notifier');
 
@@ -7,6 +9,7 @@ const pkg = require('../package.json');
 
 const whoami = require('../src/whoami');
 const login = require('../src/login');
+const download = require('../src/download');
 
 const { version, description } = pkg;
 
@@ -25,6 +28,11 @@ program
   .command('login')
   .description('Auth user to get VTEX-Auth-Cookies')
   .action(login);
+
+program
+  .command('download')
+  .description('Download full content from CMS (CSS/JS/HTML)')
+  .action(download);
 
 program.parse(process.argv);
 

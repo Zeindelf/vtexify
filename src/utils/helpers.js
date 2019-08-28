@@ -2,7 +2,7 @@ const DateDiff = require('date-diff');
 
 const wait = require('util').promisify(setTimeout); // For test purpose
 
-const diff = (date) => new DateDiff(new Date(), new Date(date));
+const diff = (date) => new DateDiff(new Date(), new Date(date)).seconds();
 
 /**
  * Check if a string is a valid mail.
@@ -73,6 +73,20 @@ const pad = (number, size) => {
   return stringNum;
 };
 
+/**
+ * Format a seconds given into a human time
+ *
+ * @param {Number} value Value in seconds
+ * @returns xx:xx:xx
+ */
+const time = (value) => {
+  const hours = Math.floor(value / 60 / 60);
+  const minutes = Math.floor((value - (hours * 60 * 60)) / 60);
+  const seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
+
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+};
+
 module.exports = {
   wait,
   diff,
@@ -80,4 +94,5 @@ module.exports = {
   isVtexCode,
   objectSearch,
   pad,
+  time,
 };
