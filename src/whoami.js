@@ -3,7 +3,7 @@ const clc = require('cli-color');
 const { read, authPath } = require('./utils/file');
 const { diff, objectSearch, time } = require('./utils/helpers');
 
-module.exports = async () => {
+module.exports = () => {
   const authFile = read(authPath);
   const current = objectSearch(authFile, { active: true });
 
