@@ -24,9 +24,11 @@
     "date-diff": "^0.2.1",
     "dotenv": "^8.1.0",
     "fs-extra": "^8.1.0",
+    "glob": "^7.1.4",
     "inquirer": "^7.0.0",
     "jsonfile": "^5.0.0",
     "lodash": "^4.17.15",
+    "normalize-path": "^3.0.0",
     "ora": "^3.4.0",
     "qs": "^6.8.0",
     "update-notifier": "^3.0.1"

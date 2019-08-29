@@ -10,6 +10,7 @@ const pkg = require('../package.json');
 const whoami = require('../src/whoami');
 const login = require('../src/login');
 const download = require('../src/download');
+const upload = require('../src/upload');
 
 const { version, description } = pkg;
 
@@ -30,8 +31,13 @@ program
   .action(login);
 
 program
+  .command('upload')
+  .description('Upload VTEX files (HTML/CSS/JS)')
+  .action(upload);
+
+program
   .command('download')
-  .description('Download full content from CMS (CSS/JS/HTML)')
+  .description('Download full content from CMS (HTML/CSS/JS)')
   .action(download);
 
 program.parse(process.argv);
