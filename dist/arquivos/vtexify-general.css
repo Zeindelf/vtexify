@@ -1,0 +1,21 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1420px;
+}
+
+.header {
+  background-color: var(--color-gray-darken);
+  color: var(--color-white);
+  padding: 16px 32px;
+}
+
+.footer {
+  margin-top: auto;
+  background-color: var(--color-gray-lighten);
+  color: var(--color-gray-darken);
+  padding: 16px 32px;
+}

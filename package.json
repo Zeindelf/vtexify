@@ -20,7 +20,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "cli-color": "^1.4.0",
-    "commander": "^3.0.0",
+    "commander": "^3.0.1",
     "date-diff": "^0.2.1",
     "dotenv": "^8.1.0",
     "fs-extra": "^8.1.0",
@@ -34,7 +34,7 @@
     "update-notifier": "^3.0.1"
   },
   "devDependencies": {
-    "eslint": "^6.2.2",
+    "eslint": "^6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "husky": "^3.0.4"

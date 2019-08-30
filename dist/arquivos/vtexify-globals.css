@@ -1,0 +1,59 @@
+:root {
+  --font-primary: "Raleway", sans-serif;
+  --font-secondary: "Lora", serif;
+  --font-size-base: 16px;
+  --font-weight-base: 400;
+  --color-white: #fff;
+  --color-gray-lighten: #cecece;
+  --color-gray-darken: #333;
+  --color-black: #000;
+  --color-text-base: var(--color-gray-darken);
+  --color-bg-base: var(--color-gray-lighten);
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  color: var(--color-text-base);
+  box-sizing: border-box;
+  font-family: "Helvetica", "Arial", sans-serif;
+  line-height: 1.4;
+  font-size: var(--font-size-base);
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  background-color: var(--color-bg-base);
+  font-weight: var(--font-weight-base);
+  cursor: default;
+  word-break: break-word;
+  height: 100%;
+}
+
+html.fonts-loaded {
+  font-family: var(--font-primary);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media only screen and (min-width: 769px) {
+  body {
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+  }
+
+  body::-webkit-scrollbar {
+    width: 0 !important;
+  }
+}

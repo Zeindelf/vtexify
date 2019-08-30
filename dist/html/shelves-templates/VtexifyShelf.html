@@ -1,0 +1,30 @@
+#set($productId = $product.Id)
+#set($productTitle = $product.HtmlEscapedName)
+#set($productLink = $product.Uri)
+#set($productListPrice = $product.ListPrice)
+#set($productBestPrice = $product.BestPrice)
+
+<article class="js--shelf-item" data-product-id="$productId" itemscope="" itemtype="http://schema.org/Product"><a
+    href="$productLink" title="$productTitle" itemprop="url">
+    <h3 class="hidden-heading" itemprop="name">$productTitle</h3>
+  </a>
+  #if ($product.IsInStock)
+
+  <div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+    #if ($product.HasBestPrice)
+
+    <del class="hidden-heading" itemprop="highPrice">$productListPrice</del><ins class="hidden-heading"
+      itemprop="lowPrice">$productBestPrice</ins>
+    #else
+
+    <p class="hidden-heading" itemprop="lowPrice">$productBestPrice</p>
+    #end
+
+    <button class="hidden-heading" itemprop="availability" itemtype="http://schema.org/InStock">Comprar</button>
+  </div>
+  #else
+
+  <p class="hidden-heading" itemprop="availability" itemtype="http://schema.org/OutOfStock">Produto Esgotado</p>
+  #end
+
+</article>
