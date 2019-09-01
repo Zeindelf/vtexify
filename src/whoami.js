@@ -9,15 +9,17 @@ module.exports = () => {
 
   if (!current) {
     console.log();
-    console.log(clc.red('Not logged in'));
+    console.log(clc.red('  Not logged in'));
+    console.log();
     process.exit(1);
   }
 
   const { account, email, updatedAt } = current;
-  const expireTime = (process.env.EXPIRE_TIME) - diff(updatedAt);
+  const expire = process.env.EXPIRE_TIME - diff(updatedAt);
 
   console.log();
-  console.log(`Account: ${clc.green(account)}`);
-  console.log(`User: ${clc.green(email)}`);
-  console.log(`Expire in: ${expireTime > 0 ? clc.green(time(expireTime)) : clc.red('Expired, please login')}`);
+  console.log(`  Account: ${clc.green(account)}`);
+  console.log(`  User: ${clc.green(email)}`);
+  console.log(`  Expire in: ${expire > 0 ? clc.green(time(expire)) : clc.red('Expired, please login')}`);
+  console.log();
 };

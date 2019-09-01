@@ -4,28 +4,26 @@ const clc = require('cli-color');
 
 const { loginQuestions, accessKeyQuestion } = require('./config/questions');
 const { read, authPath, writeAuthFile } = require('./utils/file');
-const { diff, objectSearch } = require('./utils/helpers');
+const { objectSearch } = require('./utils/helpers');
+const { validateLogin } = require('./utils/validate');
 
 const vtexId = require('./VtexId');
 
-const success = (account, email) => console.log(`
-  ${clc.green('✔')} Succesfully logged in ${clc.green.bold(account)} with user ${clc.green.bold(email)}
-`);
+const success = (account, email) => console.log(`  Succesfully logged in ${clc.green.bold(account)} with user ${clc.green.bold(email)}`);
 
 module.exports = async () => {
   const authFile = read(authPath);
   const current = objectSearch(authFile, { active: true });
   const spinner = new Ora({ color: 'yellow', indent: 2 });
   const { account, email } = await prompt(loginQuestions);
+  const validate = validateLogin(current, account, email);
 
-  if (current) {
-    const { account: currentAcc, updatedAt } = current;
-
-    if (currentAcc === account && diff(updatedAt).hours() < 8) {
-      console.log();
-      success(account, email);
-      process.exit(1);
-    }
+  // TODO: Validate an existing AuthCookie in a AuthFile to avoid relogin
+  if (current && validate) {
+    console.log();
+    success(account, email);
+    console.log();
+    process.exit(1);
   }
 
   vtexId.setAccount(account);
@@ -40,6 +38,7 @@ module.exports = async () => {
     console.log();
   } catch (err) {
     console.log(clc.red('Fail to send email. Please try again'));
+    console.log();
     process.exit(1);
   }
 
@@ -52,10 +51,11 @@ module.exports = async () => {
     const authCookie = await vtexId.validateToken(token, email, accessKey);
     spinner.succeed();
 
-    writeAuthFile(authPath, authFile, account, email, token, authCookie);
+    writeAuthFile(account, email, token, authCookie);
     console.log();
   } catch (err) {
     console.log(clc.red('Fail to generate AuthCookie. Please try again'));
+    console.log();
     process.exit(1);
   }
 
