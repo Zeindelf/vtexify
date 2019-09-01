@@ -7,6 +7,8 @@ const normalize = require('normalize-path');
 const glob = require('glob');
 const filesize = require('filesize');
 
+const { objectSearch } = require('../utils/helpers');
+
 /**
  * Create path on Users directory
  * @returns {String}
@@ -88,6 +90,12 @@ const writeAuthFile = async (account, email, authenticationToken, authCookie) =>
   write(authPath, content);
 };
 
+const getCurrentActive = () => {
+  const authFile = read(authPath);
+
+  return objectSearch(authFile, { active: true });
+};
+
 module.exports = {
   authPath,
   write,
@@ -95,4 +103,5 @@ module.exports = {
   filesGlobMatch,
   formatFiles,
   writeAuthFile,
+  getCurrentActive,
 };

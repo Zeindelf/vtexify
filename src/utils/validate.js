@@ -1,5 +1,7 @@
 const { diff } = require('./helpers');
 
+const validateDiff = (date) => diff(date) < process.env.EXPIRE_TIME;
+
 const validateLogin = (current, account, email) => {
   if (!current) {
     return false;
@@ -7,9 +9,10 @@ const validateLogin = (current, account, email) => {
 
   return current.account === account
     && current.email === email
-    && diff(current.updatedAt) < process.env.EXPIRE_TIME;
+    && validateDiff(current.updatedAt);
 };
 
 module.exports = {
+  validateDiff,
   validateLogin,
 };

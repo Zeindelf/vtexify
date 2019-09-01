@@ -3,7 +3,8 @@ const inquirer = require('inquirer');
 const clc = require('cli-color');
 
 // const vtexCMS = require('./VtexCMS');
-const { filesGlobMatch } = require('./utils/file');
+const { filesGlobMatch, getCurrentActive } = require('./utils/file');
+const { validateDiff } = require('./utils/validate');
 const { uploadQuestions } = require('./questions/upload');
 
 inquirer.registerPrompt('path', require('inquirer-path').PathPrompt);
@@ -18,6 +19,17 @@ module.exports = async () => {
     process.exit(1);
   }
 
+  const current = getCurrentActive();
+  const validate = validateDiff(current.updatedAt);
+
+  if (!validate) {
+    console.log();
+    console.log(`Session expired. Please login with ${clc.green('vtexify login')}`);
+    console.log();
+    process.exit(1);
+  }
+
+  // Process to upload
   console.log(clc.green('PASSED'), type, files, confirm);
   console.log(filesGlobMatch(files));
 };

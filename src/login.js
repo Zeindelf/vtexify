@@ -3,18 +3,16 @@ const Ora = require('ora');
 const clc = require('cli-color');
 
 const { loginQuestions, accessKeyQuestion } = require('./questions/login');
-const { read, authPath, writeAuthFile } = require('./utils/file');
-const { objectSearch } = require('./utils/helpers');
+const { writeAuthFile, getCurrentActive } = require('./utils/file');
 const { validateLogin } = require('./utils/validate');
 
 const vtexId = require('./VtexId');
 
 const success = (account, email) => console.log(`  Succesfully logged in ${clc.green.bold(account)} with user ${clc.green.bold(email)}`);
+const spinner = new Ora({ color: 'yellow', indent: 2 });
 
 module.exports = async () => {
-  const authFile = read(authPath);
-  const current = objectSearch(authFile, { active: true });
-  const spinner = new Ora({ color: 'yellow', indent: 2 });
+  const current = getCurrentActive();
   const { account, email } = await prompt(loginQuestions);
   const validate = validateLogin(current, account, email);
 
