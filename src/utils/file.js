@@ -32,9 +32,18 @@ const write = (path, data) => jsonfile.writeFileSync(path, data, { spaces: 2 });
  */
 const read = (path) => jsonfile.readFileSync(path, { throws: false });
 
-const filesGlobMatch = (files) => {
-  const directory = resolve(process.cwd(), normalize(files));
-  return glob.sync(directory);
+/**
+ * Matches files by a Glob pattern
+ * @param {String} filesPath Path to files to match
+ * @returns {Array} An Array of files path matched
+ */
+const filesGlobMatch = (filesPath) => {
+  const directory = resolve(process.cwd(), normalize(filesPath));
+  const options = {
+    nodir: true,
+  };
+
+  return glob.sync(directory, options);
 };
 
 /**
@@ -58,13 +67,13 @@ const writeAuthFile = async (account, email, authenticationToken, authCookie) =>
   const authFile = read(authPath);
 
   // Sets all data to inactive
-  const filteredFile = mapValues(authFile, (acc) => {
+  const filtered = mapValues(authFile, (acc) => {
     acc.active = false;
     return acc;
   });
 
   const content = {
-    ...filteredFile,
+    ...filtered,
     [account]: {
       account,
       email,

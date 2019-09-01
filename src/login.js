@@ -2,7 +2,7 @@ const { prompt } = require('inquirer');
 const Ora = require('ora');
 const clc = require('cli-color');
 
-const { loginQuestions, accessKeyQuestion } = require('./config/questions');
+const { loginQuestions, accessKeyQuestion } = require('./questions/login');
 const { read, authPath, writeAuthFile } = require('./utils/file');
 const { objectSearch } = require('./utils/helpers');
 const { validateLogin } = require('./utils/validate');

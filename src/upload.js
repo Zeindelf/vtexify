@@ -4,7 +4,7 @@ const clc = require('cli-color');
 
 // const vtexCMS = require('./VtexCMS');
 const { filesGlobMatch } = require('./utils/file');
-const { uploadQuestions } = require('./config/questions');
+const { uploadQuestions } = require('./questions/upload');
 
 inquirer.registerPrompt('path', require('inquirer-path').PathPrompt);
 
