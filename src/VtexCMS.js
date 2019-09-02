@@ -18,12 +18,11 @@ class VtexCMS {
   }
 
   async getRequestToken() {
-    this.api.interceptors.request.use((config) => {
-      config.headers.post['Cookie'] = `VtexIdclientAutCookie=${this.authCookie};`; // eslint-disable-line
-      return config;
-    });
+    const headers = {
+      Cookie: `VtexIdclientAutCookie=${this.authCookie};`,
+    };
 
-    const { data } = await this.api.post('/admin/a/PortalManagement/AddFile?fileType=js');
+    const { data } = await this.api.post('/admin/a/PortalManagement/AddFile?fileType=js', null, { headers });
     const $ = cheerio.load(data);
     const requestToken = $('#fileUploadRequestToken').val();
 
@@ -55,15 +54,13 @@ class VtexCMS {
     this.getTemplates.cache = this.getTemplates.cache || {};
     const key = `${type}-${isSub}`;
     const endpoint = `admin/a/PortalManagement/GetTemplateList?type=${type}&IsSub=${isSub ? 1 : 0}`;
-
-    this.api.interceptors.request.use((config) => {
-      config.headers.post['Cookie'] = `VtexIdclientAutCookie=${this.authCookie};`; // eslint-disable-line
-      config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'; // eslint-disable-line
-      return config;
-    });
+    const headers = {
+      Cookie: `VtexIdclientAutCookie=${this.authCookie};`,
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    };
 
     if (!this.getTemplates.cache[key]) {
-      const { data } = await this.api.post(endpoint);
+      const { data } = await this.api.post(endpoint, null, { headers });
       this.getTemplates.cache[key] = data;
     }
 
