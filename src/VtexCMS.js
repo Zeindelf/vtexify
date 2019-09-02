@@ -1,20 +1,24 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const FormData = require('form-data');
+const { createReadStream } = require('fs-extra');
 
 class VtexCMS {
   setAccount(account, authCookie) {
+    const headers = {
+      Accept: '*/*',
+      'Cache-Control': 'no-cache',
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    };
+    const config = {
+      baseURL: `https://${account}.vtexcommercestable.com.br`,
+      timeout: 10000,
+      headers,
+    };
+
     this.account = account;
     this.authCookie = authCookie;
-    this.uri = `https://${account}.vtexcommercestable.com.br`;
-    this.api = axios.create({
-      baseURL: this.uri,
-      headers: {
-        'Cache-Control': 'no-cache',
-        Accept: '*/*',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-      },
-      timeout: 10000,
-    });
+    this.api = axios.create(config);
   }
 
   async getRequestToken() {
@@ -38,7 +42,7 @@ class VtexCMS {
     const regex = new RegExp(`(${templateName})([\\s\\S]+?)(templateId=)([\\s\\S]+?(?="))`);
     const templateMatch = templatesList.match(regex);
 
-    if (!templateMatch) {
+    if (!templateMatch || !templateMatch[4]) {
       throw new Error('Template not found');
     }
 
@@ -65,6 +69,27 @@ class VtexCMS {
     }
 
     return this.getTemplates.cache[key];
+  }
+
+  async saveFile(filepath) {
+    const form = new FormData();
+    const config = {
+      headers: {
+        Cookie: `VtexIdclientAutCookie=${this.authCookie};`,
+        'Content-Type': form.getHeaders()['content-type'],
+      },
+    };
+
+    form.append('Filename', filepath);
+    form.append('fileext', '*.jpg;*.png;*.gif;*.jpeg;*.ico;*.js;*.css');
+    form.append('folder', '/uploads');
+    form.append('Upload', 'Submit Query');
+    form.append('requestToken', this.requestToken);
+    form.append('Filedata', createReadStream(filepath));
+
+    const { data } = await this.api.put('/admin/a/FilePicker/UploadFile', form, config);
+
+    return data;
   }
 }
 

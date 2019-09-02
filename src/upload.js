@@ -1,6 +1,8 @@
 const inquirer = require('inquirer');
 const Ora = require('ora');
 const clc = require('cli-color');
+const ProgressBar = require('progress');
+const fs = require('fs-extra');
 
 const { filesGlobMatch, getCurrentActive } = require('./utils/file');
 const { validateDiff } = require('./utils/validate');
@@ -8,8 +10,14 @@ const { uploadQuestions } = require('./questions/upload');
 
 const vtexCMS = require('./VtexCMS');
 
+const defaultBar = (total) => new ProgressBar('uploading [:bar] :percent - :current/:total', {
+  total,
+  complete: '#',
+  incomplete: '-',
+  width: 20,
+});
 const spinner = new Ora({ color: 'yellow', indent: 2 });
-const cliExit = (content) => {
+const error = (content) => {
   console.log();
   console.log(content);
   console.log();
@@ -22,7 +30,7 @@ module.exports = async () => {
   const { type, files, confirm } = await inquirer.prompt(uploadQuestions);
 
   if (!confirm) {
-    cliExit(clc.red('Action cancelled'));
+    error(clc.red('Action cancelled'));
   }
 
   const current = getCurrentActive();
@@ -30,7 +38,7 @@ module.exports = async () => {
   const { account, authCookie } = current;
 
   if (!validate) {
-    cliExit(`Session expired. Please login with ${clc.green('vtexify login')}`);
+    error(`Session expired. Please login with ${clc.green('vtexify login')}`);
   }
 
   // Process to upload
@@ -43,7 +51,7 @@ module.exports = async () => {
     spinner.succeed();
     console.log();
   } catch (err) {
-    cliExit(clc.red('Fail to generate Token. Please try again'));
+    error(clc.red('Fail to generate Token. Please try again'));
   }
 
   try {
@@ -56,12 +64,23 @@ module.exports = async () => {
     console.log(template);
     console.log();
   } catch (err) {
-    cliExit(clc.red(err.message));
+    error(clc.red(err.message));
   }
 
-  console.log();
-  console.log('REQUEST_TOKEN', vtexCMS.requestToken);
-  console.log();
-  console.log(clc.green('PASSED'), type, files, confirm);
-  console.log(filesGlobMatch(files));
+  if (type === 'files') {
+    const filesMatch = filesGlobMatch(files);
+    const { size } = fs.statSync(filesMatch[0]);
+    const bar = defaultBar(size);
+
+    bar.tick(0);
+    const res = await vtexCMS.saveFile(filesMatch[0]);
+    console.log('RESPOSE', size, res);
+    bar.tick();
+  }
+
+  // console.log();
+  // console.log('REQUEST_TOKEN', vtexCMS.requestToken);
+  // console.log();
+  // console.log(clc.green('PASSED'), type, files, confirm);
+  // console.log(filesGlobMatch(files));
 };
