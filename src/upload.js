@@ -1,8 +1,6 @@
 const inquirer = require('inquirer');
 const Ora = require('ora');
 const clc = require('cli-color');
-const ProgressBar = require('progress');
-const fs = require('fs-extra');
 
 const { filesGlobMatch, getCurrentActive } = require('./utils/file');
 const { validateDiff } = require('./utils/validate');
@@ -10,12 +8,6 @@ const { uploadQuestions } = require('./questions/upload');
 
 const vtexCMS = require('./VtexCMS');
 
-const defaultBar = (total) => new ProgressBar('uploading [:bar] :percent - :current/:total', {
-  total,
-  complete: '#',
-  incomplete: '-',
-  width: 20,
-});
 const spinner = new Ora({ color: 'yellow', indent: 2 });
 const error = (content) => {
   console.log();
@@ -69,13 +61,13 @@ module.exports = async () => {
 
   if (type === 'files') {
     const filesMatch = filesGlobMatch(files);
-    const { size } = fs.statSync(filesMatch[0]);
-    const bar = defaultBar(size);
 
-    bar.tick(0);
-    const res = await vtexCMS.saveFile(filesMatch[0]);
-    console.log('RESPOSE', size, res);
-    bar.tick();
+    const request = filesMatch.map((fileMatch) => vtexCMS.saveFile(fileMatch));
+    const responses = await Promise.all(request);
+
+    console.log();
+    responses.map(({ mensagem, fileNameInserted }) => console.log(`${mensagem} ${clc.green(fileNameInserted)}`));
+    console.log();
   }
 
   // console.log();

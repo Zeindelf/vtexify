@@ -18,6 +18,7 @@
   "author": "Zeindelf <zeindelf@hotmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@open-tech-world/cli-progress-bar": "^1.0.6",
     "axios": "^0.19.0",
     "cheerio": "^1.0.0-rc.3",
     "cli-color": "^1.4.0",
@@ -35,7 +36,6 @@
     "lodash": "^4.17.15",
     "normalize-path": "^3.0.0",
     "ora": "^3.4.0",
-    "progress": "^2.0.3",
     "qs": "^6.8.0",
     "update-notifier": "^3.0.1"
   },
