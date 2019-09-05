@@ -46,28 +46,34 @@ module.exports = async () => {
     error(clc.red('Fail to generate Token. Please try again'));
   }
 
-  try {
-    spinner.start();
-    spinner.text = 'Getting Template ID, please wait...';
-    const template = await vtexCMS.getLegacyTemplateId('account', 'viewTemplate', false);
-    spinner.succeed();
+  if (type === 'templates') {
+    try {
+      spinner.start();
+      spinner.text = 'Getting Template ID, please wait...';
+      const template = await vtexCMS.getLegacyTemplateId('account', 'viewTemplate', false);
+      spinner.succeed();
 
-    console.log();
-    console.log(template);
-    console.log();
-  } catch (err) {
-    error(clc.red(err.message));
+      console.log();
+      console.log(template);
+      console.log();
+    } catch (err) {
+      error(clc.red(err.message));
+    }
   }
 
   if (type === 'files') {
     const filesMatch = filesGlobMatch(files);
 
     const request = filesMatch.map((fileMatch) => vtexCMS.saveFile(fileMatch));
-    const responses = await Promise.all(request);
+    try {
+      const responses = await Promise.all(request);
 
-    console.log();
-    responses.map(({ mensagem, fileNameInserted }) => console.log(`${mensagem} ${clc.green(fileNameInserted)}`));
-    console.log();
+      console.log();
+      responses.map(({ mensagem, fileNameInserted }) => console.log(`${mensagem} ${clc.green(fileNameInserted)}`));
+      console.log();
+    } catch (err) {
+      error(clc.red(err));
+    }
   }
 
   // console.log();

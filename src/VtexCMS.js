@@ -2,7 +2,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const FormData = require('form-data');
 const { basename } = require('path');
-const { statSync, createReadStream } = require('fs-extra');
+const { createReadStream } = require('fs-extra');
 const ProgressBar = require('@open-tech-world/cli-progress-bar');
 
 class VtexCMS {
@@ -75,13 +75,14 @@ class VtexCMS {
 
   async saveFile(filepath) {
     let progress = 0;
+    let size;
     const progressBar = new ProgressBar({
       width: 45,
       stream: process.stderr,
       barChar: '\u2588',
     });
     const filename = basename(filepath);
-    const { size } = statSync(filepath);
+    // const { size } = statSync(filepath);
     const form = new FormData();
     const config = {
       headers: {
@@ -97,7 +98,11 @@ class VtexCMS {
     form.append('requestToken', this.requestToken);
     form.append('Filedata', createReadStream(filepath));
 
-    form.on('start', () => progressBar.run('', progress, size, `| ${filename}`));
+    form.getLength((_, length) => {
+      size = length;
+    });
+
+    progressBar.run('', progress, size, `| ${filename}`);
 
     form.on('data', (chunk) => {
       progress += chunk.length;
@@ -106,9 +111,13 @@ class VtexCMS {
 
     form.on('end', () => progressBar.stop());
 
-    const { data } = await this.api.put('/admin/a/FilePicker/UploadFile', form, config);
-
-    return data;
+    // TODO: return resolve/reject promise instead
+    try {
+      const { data } = await this.api.put('/admin/a/FilePicker/UploadFile', form, config);
+      return data;
+    } catch (err) {
+      return err;
+    }
   }
 }
 
