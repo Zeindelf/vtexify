@@ -5,10 +5,16 @@ const clc = require('cli-color');
 const { loginQuestions, accessKeyQuestion } = require('./questions/login');
 const { writeAuthFile, getCurrentActive } = require('./utils/file');
 const { validateLogin } = require('./utils/validate');
+const { error, info } = require('./utils/cli');
 
 const vtexId = require('./VtexId');
 
-const success = (account, email) => console.log(`  Succesfully logged in ${clc.green.bold(account)} with user ${clc.green.bold(email)}`);
+const success = (account, email) => {
+  console.log();
+  info(`Succesfully logged in ${clc.green.bold(account)} with user ${clc.green.bold(email)}`);
+  console.log();
+  process.exit(1);
+};
 const spinner = new Ora({ color: 'yellow', indent: 2 });
 
 module.exports = async () => {
@@ -18,10 +24,7 @@ module.exports = async () => {
 
   // TODO: Validate an existing AuthCookie in a AuthFile to avoid relogin
   if (current && validate) {
-    console.log();
     success(account, email);
-    console.log();
-    process.exit(1);
   }
 
   vtexId.setAccount(account);
@@ -35,9 +38,7 @@ module.exports = async () => {
     spinner.succeed();
     console.log();
   } catch (err) {
-    console.log(clc.red('Fail to send email. Please try again'));
-    console.log();
-    process.exit(1);
+    error(`${clc.red('Fail to send email. Please try again')}`);
   }
 
   const { accessKey } = await prompt(accessKeyQuestion);
@@ -52,11 +53,8 @@ module.exports = async () => {
     writeAuthFile(account, email, token, authCookie);
     console.log();
   } catch (err) {
-    console.log(clc.red('Fail to generate AuthCookie. Please try again'));
-    console.log();
-    process.exit(1);
+    error(clc.red('Fail to generate AuthCookie. Please try again'));
   }
 
   success(account, email);
-  console.log();
 };

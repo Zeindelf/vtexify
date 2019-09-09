@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const FormData = require('form-data');
 const { basename } = require('path');
 const { createReadStream } = require('fs-extra');
-const ProgressBar = require('@open-tech-world/cli-progress-bar');
+const ProgressBar = require('./ProgressBar');
 
 class VtexCMS {
   setAccount(account, authCookie) {
@@ -76,13 +76,10 @@ class VtexCMS {
   async saveFile(filepath) {
     let progress = 0;
     let size;
-    const progressBar = new ProgressBar({
-      width: 45,
-      stream: process.stderr,
-      barChar: '\u2588',
-    });
+    // Consider change to https://github.com/derrickpelletier/node-status
+    const progressBar = new ProgressBar();
+
     const filename = basename(filepath);
-    // const { size } = statSync(filepath);
     const form = new FormData();
     const config = {
       headers: {
@@ -102,7 +99,7 @@ class VtexCMS {
       size = length;
     });
 
-    progressBar.run('', progress, size, `| ${filename}`);
+    progressBar.run(progress, size, `| ${filename}`);
 
     form.on('data', (chunk) => {
       progress += chunk.length;
@@ -111,13 +108,9 @@ class VtexCMS {
 
     form.on('end', () => progressBar.stop());
 
-    // TODO: return resolve/reject promise instead
-    try {
-      const { data } = await this.api.put('/admin/a/FilePicker/UploadFile', form, config);
-      return data;
-    } catch (err) {
-      return err;
-    }
+    return new Promise((resolve, reject) => this.api.put('/admin/a/FilePicker/UploadFile', form, config)
+      .then((data) => resolve(data))
+      .catch((err) => reject(err)));
   }
 }
 

@@ -1,7 +1,6 @@
-const clc = require('cli-color');
-
 const { filesGlobMatch, formatFiles } = require('../utils/file');
 const { createFileTable } = require('../utils/tables');
+const { error } = require('../utils/cli');
 
 exports.uploadQuestions = [
   {
@@ -30,10 +29,7 @@ exports.uploadQuestions = [
       const filesMatch = filesGlobMatch(answers.files);
 
       if (!filesMatch.length) {
-        console.log();
-        console.log(clc.red('No files match the pattern'));
-        console.log();
-        process.exit(1);
+        error('No files match the pattern');
       }
 
       console.log();
