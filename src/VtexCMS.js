@@ -5,6 +5,8 @@ const { basename } = require('path');
 const { createReadStream } = require('fs-extra');
 const ProgressBar = require('./ProgressBar');
 
+const { validateExt } = require('./utils/validate');
+
 class VtexCMS {
   setAccount(account, authCookie) {
     const headers = {
@@ -87,6 +89,8 @@ class VtexCMS {
         'Content-Type': form.getHeaders()['content-type'],
       },
     };
+
+    console.log('VALIDATE_EXT', validateExt(filepath));
 
     form.append('Filename', filepath);
     form.append('fileext', '*.jpg;*.png;*.gif;*.jpeg;*.ico;*.js;*.css');

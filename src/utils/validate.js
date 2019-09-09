@@ -12,7 +12,10 @@ const validateLogin = (current, account, email) => {
     && validateDiff(current.updatedAt);
 };
 
+const validateExt = (file) => (/\.(css|js|jpe?g|xml)$/i).test(file);
+
 module.exports = {
   validateDiff,
   validateLogin,
+  validateExt,
 };
