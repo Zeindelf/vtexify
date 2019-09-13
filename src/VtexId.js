@@ -1,50 +1,50 @@
-const axios = require('axios');
-const { stringify } = require('qs');
+const axios = require('axios')
+const { stringify } = require('qs')
 
 class VtexId {
-  setAccount(account) {
-    this.account = account;
-    this.uri = `https://${account}.myvtex.com/api/vtexid/pub/authentication`;
+  setAccount (account) {
+    this.account = account
+    this.uri = `https://${account}.myvtex.com/api/vtexid/pub/authentication`
     this.api = axios.create({
-      baseURL: this.uri,
-    });
+      baseURL: this.uri
+    })
   }
 
-  async getToken() {
+  async getToken () {
     const { data } = await this.api.get('/start', {
       params: {
         callbackUrl: `${this.uri}/finish`,
         user: null,
         locale: 'pt-BR',
         accountName: this.account,
-        appStart: true,
-      },
-    });
+        appStart: true
+      }
+    })
 
     if (data && data.authenticationToken) {
-      return data.authenticationToken;
+      return data.authenticationToken
     }
 
-    return false;
+    return false
   }
 
-  async getAccessKey(token, email) {
+  async getAccessKey (token, email) {
     await this.api.post('/accesskey/send', stringify({
       email,
       authenticationToken: token,
-      locale: 'pt-BR',
-    }));
+      locale: 'pt-BR'
+    }))
   }
 
-  async validateToken(token, login, accesskey) {
+  async validateToken (token, login, accesskey) {
     const { data } = await this.api.post('/accesskey/validate', stringify({
       login,
       accesskey,
-      authenticationToken: token,
-    }));
+      authenticationToken: token
+    }))
 
-    return data.authCookie.Value;
+    return data.authCookie.Value
   }
 }
 
-module.exports = new VtexId();
+module.exports = new VtexId()

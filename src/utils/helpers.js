@@ -1,8 +1,8 @@
-const DateDiff = require('date-diff');
+const DateDiff = require('date-diff')
 
-const wait = require('util').promisify(setTimeout); // For test purpose
+const wait = require('util').promisify(setTimeout) // For test purpose
 
-const diff = (date) => new DateDiff(new Date(), new Date(date)).seconds();
+const diff = (date) => new DateDiff(new Date(), new Date(date)).seconds()
 
 /**
  * Check if a string is a valid mail.
@@ -12,49 +12,49 @@ const diff = (date) => new DateDiff(new Date(), new Date(date)).seconds();
  * @return {boolean}
  */
 const isEmail = (email) => {
-  const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
 
-  return regex.test(email);
-};
+  return regex.test(email)
+}
 
 const isVtexCode = (val) => {
-  const regex = /^[0-9]{6}$/;
+  const regex = /^[0-9]{6}$/
 
-  return regex.test(val);
-};
+  return regex.test(val)
+}
 
 const objectSearch = (object, needle) => {
-  let p;
-  let key;
-  let val;
-  let tRet;
+  let p
+  let key
+  let val
+  let tRet
 
   /* eslint-disable no-restricted-syntax */
   for (p in needle) {
     if (hasOwnProperty.call(needle, p)) {
-      key = p;
-      val = needle[p];
+      key = p
+      val = needle[p]
     }
   }
 
   for (p in object) {
     if (p === key) {
       if (object[p] === val) {
-        return object;
+        return object
       }
     } else if (object[p] instanceof Object) {
       if (hasOwnProperty.call(object, p)) {
-        tRet = objectSearch(object[p], needle);
+        tRet = objectSearch(object[p], needle)
 
         if (tRet) {
-          return tRet;
+          return tRet
         }
       }
     }
   }
 
-  return false;
-};
+  return false
+}
 
 /**
  * Zero padding number
@@ -64,14 +64,14 @@ const objectSearch = (object, needle) => {
  * @return {string}             Formatted num with zero padding
  */
 const pad = (number, size) => {
-  let stringNum = String(number);
+  let stringNum = String(number)
 
   while (stringNum.length < (size || 2)) {
-    stringNum = `0${stringNum}`;
+    stringNum = `0${stringNum}`
   }
 
-  return stringNum;
-};
+  return stringNum
+}
 
 /**
  * Format a seconds given into a human time
@@ -80,12 +80,12 @@ const pad = (number, size) => {
  * @returns xx:xx:xx
  */
 const time = (value) => {
-  const hours = Math.floor(value / 60 / 60);
-  const minutes = Math.floor((value - (hours * 60 * 60)) / 60);
-  const seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
+  const hours = Math.floor(value / 60 / 60)
+  const minutes = Math.floor((value - (hours * 60 * 60)) / 60)
+  const seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60))
 
-  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-};
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+}
 
 module.exports = {
   wait,
@@ -94,5 +94,5 @@ module.exports = {
   isVtexCode,
   objectSearch,
   pad,
-  time,
-};
+  time
+}

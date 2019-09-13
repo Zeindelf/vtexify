@@ -1,4 +1,4 @@
-const Table = require('cli-table');
+const Table = require('cli-table')
 
 /**
  * Format a file data into an Table for CLI
@@ -8,15 +8,15 @@ const createFileTable = (files) => {
   const table = new Table({
     head: ['File', 'Size'],
     style: {
-      head: ['green'],
-    },
-  });
+      head: ['green']
+    }
+  })
 
-  table.push(...files);
+  table.push(...files)
 
-  return table.toString();
-};
+  return table.toString()
+}
 
 module.exports = {
-  createFileTable,
-};
+  createFileTable
+}
