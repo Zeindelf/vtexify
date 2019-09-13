@@ -9,9 +9,15 @@
   "scripts": {
     "lint": "eslint bin src --fix --color"
   },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "lint-staged"
     }
   },
   "repository": "https://github.com/Zeindelf/vtexify.git",
@@ -45,7 +51,8 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "husky": "^3.0.5"
+    "husky": "^3.0.5",
+    "lint-staged": "^9.2.5"
   },
   "engines": {
     "node": ">=8"
